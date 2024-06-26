@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sigma.Database.Models;
+using Sigma.Domain.DTOs;
 using Sigma.Domain.Interfaces;
 
 namespace Sigma.API.Controllers;
@@ -16,7 +16,7 @@ public sealed class CandidatesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddOrUpdateCandidate([FromBody] Candidate candidate)
+    public async Task<IActionResult> AddOrUpdateCandidate([FromBody] CandidateDTO candidate)
     {
         await _service.AddOrUpdateCandidateAsync(candidate);
         return Ok();

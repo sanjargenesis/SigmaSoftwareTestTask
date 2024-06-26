@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sigma.Database.Models;
+using Sigma.Domain.DTOs;
 using Sigma.Domain.Interfaces;
 
 namespace Sigma.Service.Services;
@@ -7,10 +9,12 @@ namespace Sigma.Service.Services;
 public sealed class CandidateService : ICandidateService
 {
     private readonly ICandidateRepository _repository;
+    private readonly IMapper _mapper;
 
-    public CandidateService(ICandidateRepository repository)
+    public CandidateService(ICandidateRepository repository, IMapper mapper)
     {
         _repository = repository;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -19,7 +23,7 @@ public sealed class CandidateService : ICandidateService
     /// <param name="candidate"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public async Task AddOrUpdateCandidateAsync(Candidate candidate)
+    public async Task AddOrUpdateCandidateAsync(CandidateDTO candidate)
     {
         try
         {
@@ -39,7 +43,7 @@ public sealed class CandidateService : ICandidateService
             }
             else
             {
-                await _repository.AddAsync(candidate);
+                await _repository.AddAsync(_mapper.Map<Candidate>(candidate));
             }
         }
         catch (DbUpdateException dbEx)
