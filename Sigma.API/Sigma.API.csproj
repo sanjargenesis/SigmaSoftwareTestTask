@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Sigma.Database\Sigma.Database.csproj" />
     <ProjectReference Include="..\Sigma.Domain\Sigma.Domain.csproj" />
     <ProjectReference Include="..\Sigma.Repository\Sigma.Repository.csproj" />
