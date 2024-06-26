@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Sigma.Database.Models;
 using Sigma.Domain.DTOs;
+using Sigma.Domain.Exceptions;
 using Sigma.Domain.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace Sigma.Service.Services;
 
@@ -28,6 +30,11 @@ public sealed class CandidateService : ICandidateService
         try
         {
             var existingCandidate = await _repository.GetByEmailAsync(candidate.Email);
+            
+            if (!IsValidEmail(candidate.Email))
+            {
+                throw new EmailValidationException("Invalid email format.");
+            }
 
             if (existingCandidate is not null)
             {
@@ -38,6 +45,7 @@ public sealed class CandidateService : ICandidateService
                 existingCandidate.LinkedInProfileUrl = candidate.LinkedInProfileUrl;
                 existingCandidate.GitHubProfileUrl = candidate.GitHubProfileUrl;
                 existingCandidate.Comment = candidate.Comment;
+                existingCandidate.UpdatedAt = DateTime.UtcNow;
 
                 await _repository.UpdateAsync(existingCandidate);
             }
@@ -66,6 +74,17 @@ public sealed class CandidateService : ICandidateService
             // Handle all other exceptions
             throw new Exception("An unknown error occurred.", ex);
         }
+    }
+
+    private static bool IsValidEmail(string email)
+    {
+        var emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+
+        if (string.IsNullOrEmpty(email))
+            return false;
+
+        var regex = new Regex(emailPattern);
+        return regex.IsMatch(email);
     }
 }
 

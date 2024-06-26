@@ -7,6 +7,6 @@ public static class DatabaseConfig
     public static void AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<Context>(options =>
-        options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
     }
 }
