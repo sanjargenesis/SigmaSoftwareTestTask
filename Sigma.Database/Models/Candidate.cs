@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sigma.Database.Models;
 
@@ -11,16 +12,20 @@ public sealed class Candidate : BaseModel
     
     [Required]
     public required string LastName { get; set; }
-   
+
+    [Phone]
     public string? PhoneNumber { get; set; }
    
     [Required]
     public required string Email { get; set; }
-
-    public string? PreferredCallTime { get; set; }
-   
-    public string? LinkedInProfileUrl { get; set; }
     
+    [ForeignKey(nameof(TimeIntervalToCallId))]
+    public TimeIntervalToCall? TimeIntervalToCall { get; set; }
+
+    public int TimeIntervalToCallId { get; set; }
+
+    public string? LinkedInProfileUrl { get; set; }
+
     public string? GitHubProfileUrl { get; set; }
 
     [Required]

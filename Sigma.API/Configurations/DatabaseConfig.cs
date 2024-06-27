@@ -8,5 +8,6 @@ public static class DatabaseConfig
     {
         services.AddDbContext<Context>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        services.AddScoped<ContextInitialiser>();
     }
 }

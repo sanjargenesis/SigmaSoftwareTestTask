@@ -12,7 +12,7 @@ using Sigma.Database.Contexts;
 namespace Sigma.Database.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240626085321_init")]
+    [Migration("20240627053958_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -61,8 +61,8 @@ namespace Sigma.Database.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
-                    b.Property<string>("PreferredCallTime")
-                        .HasColumnType("text");
+                    b.Property<int>("TimeIntervalToCallId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -72,7 +72,39 @@ namespace Sigma.Database.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("TimeIntervalToCallId");
+
                     b.ToTable("Candidates");
+                });
+
+            modelBuilder.Entity("Sigma.Database.Models.TimeIntervalToCall", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EndHour")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StartHour")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TimeIntervalsToCall");
+                });
+
+            modelBuilder.Entity("Sigma.Database.Models.Candidate", b =>
+                {
+                    b.HasOne("Sigma.Database.Models.TimeIntervalToCall", "TimeIntervalToCall")
+                        .WithMany()
+                        .HasForeignKey("TimeIntervalToCallId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TimeIntervalToCall");
                 });
 #pragma warning restore 612, 618
         }

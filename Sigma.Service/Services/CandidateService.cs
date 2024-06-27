@@ -41,7 +41,7 @@ public sealed class CandidateService : ICandidateService
                 existingCandidate.FirstName = candidate.FirstName;
                 existingCandidate.LastName = candidate.LastName;
                 existingCandidate.PhoneNumber = candidate.PhoneNumber;
-                existingCandidate.PreferredCallTime = candidate.PreferredCallTime;
+                existingCandidate.TimeIntervalToCall = candidate.TimeIntervalToCall;
                 existingCandidate.LinkedInProfileUrl = candidate.LinkedInProfileUrl;
                 existingCandidate.GitHubProfileUrl = candidate.GitHubProfileUrl;
                 existingCandidate.Comment = candidate.Comment;
@@ -68,11 +68,6 @@ public sealed class CandidateService : ICandidateService
         {
             // Handle invalid operations
             throw new Exception("An invalid operation occurred.", invalidOpEx);
-        }
-        catch (Exception ex)
-        {
-            // Handle all other exceptions
-            throw new Exception("An unknown error occurred.", ex);
         }
     }
 

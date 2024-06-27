@@ -13,6 +13,20 @@ namespace Sigma.Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "TimeIntervalsToCall",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    StartHour = table.Column<int>(type: "integer", nullable: false),
+                    EndHour = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeIntervalsToCall", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Candidates",
                 columns: table => new
                 {
@@ -22,7 +36,7 @@ namespace Sigma.Database.Migrations
                     LastName = table.Column<string>(type: "text", nullable: false),
                     PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    PreferredCallTime = table.Column<string>(type: "text", nullable: true),
+                    TimeIntervalToCallId = table.Column<int>(type: "integer", nullable: false),
                     LinkedInProfileUrl = table.Column<string>(type: "text", nullable: true),
                     GitHubProfileUrl = table.Column<string>(type: "text", nullable: true),
                     Comment = table.Column<string>(type: "text", nullable: false),
@@ -32,6 +46,12 @@ namespace Sigma.Database.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Candidates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Candidates_TimeIntervalsToCall_TimeIntervalToCallId",
+                        column: x => x.TimeIntervalToCallId,
+                        principalTable: "TimeIntervalsToCall",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -39,6 +59,11 @@ namespace Sigma.Database.Migrations
                 table: "Candidates",
                 column: "Email",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Candidates_TimeIntervalToCallId",
+                table: "Candidates",
+                column: "TimeIntervalToCallId");
         }
 
         /// <inheritdoc />
@@ -46,6 +71,9 @@ namespace Sigma.Database.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Candidates");
+
+            migrationBuilder.DropTable(
+                name: "TimeIntervalsToCall");
         }
     }
 }

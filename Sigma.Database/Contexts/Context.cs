@@ -10,12 +10,19 @@ public sealed class Context : DbContext
     }
 
     public DbSet<Candidate> Candidates { get; set; }
-    
+    public DbSet<TimeIntervalToCall> TimeIntervalsToCall { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Candidate>()
             .HasIndex(c => c.Email)
             .IsUnique();
+
+        modelBuilder.Entity<Candidate>()
+            .HasOne(c => c.TimeIntervalToCall)
+            .WithMany()
+            .HasForeignKey(c => c.TimeIntervalToCallId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         base.OnModelCreating(modelBuilder);
     }

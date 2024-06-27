@@ -16,6 +16,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using var scope = app.Services.CreateScope();
+    var initialiser = scope.ServiceProvider.GetRequiredService<ContextInitialiser>();
+    await initialiser.InitialiseAsync();
 }
 
 app.UseHttpsRedirection();
