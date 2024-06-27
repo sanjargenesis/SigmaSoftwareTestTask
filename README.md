@@ -1,4 +1,4 @@
-# SigmaSoftwareTestTask
+# Sigma Software test task
 
 Sigma API is a .NET Core-based web API for managing candidate data. It supports operations such as adding or updating if current email exists, including validation for email addresses.
 
